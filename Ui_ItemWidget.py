@@ -1,40 +1,63 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'res/ItemWidget.ui',
-# licensing of 'res/ItemWidget.ui' applies.
-#
-# Created: Wed Jul 24 14:22:57 2019
-#      by: pyside2-uic  running on PySide2 5.13.0
-#
-# WARNING! All changes made in this file will be lost!
+################################################################################
+## Form generated from reading UI file 'ItemWidget.ui'
+##
+## Created by: Qt User Interface Compiler version 5.14.0
+##
+## WARNING! All changes made in this file will be lost when recompiling UI file!
+################################################################################
 
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2.QtCore import (QCoreApplication, QMetaObject, QObject, QPoint,
+    QRect, QSize, QUrl, Qt)
+from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QFont,
+    QFontDatabase, QIcon, QLinearGradient, QPalette, QPainter, QPixmap,
+    QRadialGradient)
+from PySide2.QtWidgets import *
 
 class Ui_ItemWidget(object):
     def setupUi(self, ItemWidget):
-        ItemWidget.setObjectName("ItemWidget")
-        ItemWidget.resize(200, 100)
-        self.horizontalLayout = QtWidgets.QHBoxLayout(ItemWidget)
-        self.horizontalLayout.setObjectName("horizontalLayout")
-        self.labelThumbnail = QtWidgets.QLabel(ItemWidget)
-        self.labelThumbnail.setText("")
-        self.labelThumbnail.setObjectName("labelThumbnail")
+        if ItemWidget.objectName():
+            ItemWidget.setObjectName(u"ItemWidget")
+        ItemWidget.resize(505, 163)
+        self.horizontalLayout = QHBoxLayout(ItemWidget)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.labelThumbnail = QLabel(ItemWidget)
+        self.labelThumbnail.setObjectName(u"labelThumbnail")
+
         self.horizontalLayout.addWidget(self.labelThumbnail)
-        self.verticalLayout = QtWidgets.QVBoxLayout()
-        self.verticalLayout.setObjectName("verticalLayout")
-        self.labelTitle = QtWidgets.QLabel(ItemWidget)
-        self.labelTitle.setText("")
-        self.labelTitle.setObjectName("labelTitle")
+
+        self.verticalLayout = QVBoxLayout()
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.labelTitle = QLabel(ItemWidget)
+        self.labelTitle.setObjectName(u"labelTitle")
+
         self.verticalLayout.addWidget(self.labelTitle)
-        self.progressBar = QtWidgets.QProgressBar(ItemWidget)
-        self.progressBar.setProperty("value", 24)
-        self.progressBar.setObjectName("progressBar")
+
+        self.labelInfo = QLabel(ItemWidget)
+        self.labelInfo.setObjectName(u"labelInfo")
+
+        self.verticalLayout.addWidget(self.labelInfo)
+
+        self.progressBar = QProgressBar(ItemWidget)
+        self.progressBar.setObjectName(u"progressBar")
+        self.progressBar.setValue(24)
+
         self.verticalLayout.addWidget(self.progressBar)
+
+
         self.horizontalLayout.addLayout(self.verticalLayout)
 
+
         self.retranslateUi(ItemWidget)
-        QtCore.QMetaObject.connectSlotsByName(ItemWidget)
+
+        QMetaObject.connectSlotsByName(ItemWidget)
+    # setupUi
 
     def retranslateUi(self, ItemWidget):
-        ItemWidget.setWindowTitle(QtWidgets.QApplication.translate("ItemWidget", "Form", None, -1))
+        ItemWidget.setWindowTitle(QCoreApplication.translate("ItemWidget", u"Form", None))
+        self.labelThumbnail.setText("")
+        self.labelTitle.setText("")
+        self.labelInfo.setText("")
+    # retranslateUi
 
