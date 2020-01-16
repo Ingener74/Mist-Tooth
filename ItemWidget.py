@@ -48,7 +48,6 @@ class YouTubeDownloader(QThread):
                     a = 'Writing thumbnail to'
                     if a in msg:
                         thumbnail_filename = msg[msg.find(a) + len(a) + 2:]
-                        logger.debug(thumbnail_filename)
                         self.__outer.thumbnail(thumbnail_filename)
 
                 def warning(self, msg):
@@ -71,7 +70,7 @@ class YouTubeDownloader(QThread):
             self.error_signal.emit(str(e))
 
     def hooks(self, data):
-        logger.info(data)
+        # logger.info(data)
         if 'filename' in data:
             if data['filename'] != self.title:
                 self.title = data['filename']
@@ -126,11 +125,8 @@ class ItemWidget(QWidget):
         self.ui.labelInfo.setText(info)
 
     def set_thumbnail(self, filename: str):
-        logger.debug(filename)
         pixmap: QPixmap = QPixmap(filename)
-        logger.debug(pixmap.rect())
         pixmap = pixmap.scaledToHeight(self.rect().height())
-        logger.debug(pixmap.rect())
         self.ui.labelThumbnail.setPixmap(pixmap)
 
     def set_progress(self, progress: int):
