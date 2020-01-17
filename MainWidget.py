@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from PySide2.QtCore import Qt, QTimerEvent, Slot, Signal
+from PySide2.QtCore import Qt, QTimerEvent, Slot, Signal, QDir
 from PySide2.QtWidgets import QWidget, QListWidgetItem, QApplication, QMessageBox
-from PySide2.QtGui import QKeyEvent
+from PySide2.QtGui import QKeyEvent, QDesktopServices
 
 from Ui_MainWidget import Ui_MainWidget
 from ItemWidget import ItemWidget
-from settings import settings
+from settings import settings, DOWNLOAD_DIR
 
 
 class MainWidget(QWidget):
@@ -20,9 +20,11 @@ class MainWidget(QWidget):
         self.ui.setupUi(self)
 
         self.settings = settings()
-        
+
         clipboard = QApplication.clipboard()
         clipboard.changed.connect(self.on_clipboard)
+
+        self.ui.pushButtonOpenDownloadDir.clicked.connect(self.open_download_dir_pressed)
 
     def closeEvent(self, event):
         self.settings.setValue('geom', self.saveGeometry())
@@ -61,3 +63,6 @@ class MainWidget(QWidget):
         list_item.setSizeHint(download_item.sizeHint())
         self.ui.listWidget.setItemWidget(list_item, download_item)
         download_item.start_download(link)
+
+    def open_download_dir_pressed(self):
+        QDesktopServices.openUrl(QDir(self.settings.value(DOWNLOAD_DIR) if self.settings.contains(DOWNLOAD_DIR) else QDir.currentPath()).absolutePath())

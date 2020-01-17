@@ -30,6 +30,33 @@ class Ui_MainWidget(object):
 
         self.verticalLayout.addWidget(self.listWidget)
 
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer)
+
+        self.pushButtonOpenDownloadDir = QPushButton(MainWidget)
+        self.pushButtonOpenDownloadDir.setObjectName(u"pushButtonOpenDownloadDir")
+        icon1 = QIcon()
+        icon1.addFile(u":/main/open_dir.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.pushButtonOpenDownloadDir.setIcon(icon1)
+        self.pushButtonOpenDownloadDir.setIconSize(QSize(32, 32))
+
+        self.horizontalLayout.addWidget(self.pushButtonOpenDownloadDir)
+
+        self.pushButtonSettings = QPushButton(MainWidget)
+        self.pushButtonSettings.setObjectName(u"pushButtonSettings")
+        icon2 = QIcon()
+        icon2.addFile(u":/main/settings.png", QSize(), QIcon.Normal, QIcon.Off)
+        self.pushButtonSettings.setIcon(icon2)
+        self.pushButtonSettings.setIconSize(QSize(32, 32))
+
+        self.horizontalLayout.addWidget(self.pushButtonSettings)
+
+
+        self.verticalLayout.addLayout(self.horizontalLayout)
+
 
         self.retranslateUi(MainWidget)
 
@@ -38,6 +65,8 @@ class Ui_MainWidget(object):
 
     def retranslateUi(self, MainWidget):
         MainWidget.setWindowTitle(QCoreApplication.translate("MainWidget", u"Youtube \u0441\u043a\u0430\u0447\u0438\u0432\u0430\u0442\u0435\u043b\u044c", None))
+        self.pushButtonOpenDownloadDir.setText("")
+        self.pushButtonSettings.setText("")
     # retranslateUi
 
 from resources_rc import *

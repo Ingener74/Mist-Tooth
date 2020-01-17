@@ -10,6 +10,13 @@
             "request": "launch",
             "program": "${workspaceFolder}/MistTooth.py",
             "console": "integratedTerminal"
+        },
+        {
+            "name": "BuildRes",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/build_res.py",
+            "console": "integratedTerminal"
         }
     ]
 }

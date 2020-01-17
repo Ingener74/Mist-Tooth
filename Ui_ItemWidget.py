@@ -61,3 +61,4 @@ class Ui_ItemWidget(object):
         self.labelInfo.setText("")
     # retranslateUi
 
+from resources_rc import *

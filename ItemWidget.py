@@ -9,11 +9,12 @@ from time import strftime
 
 # import requests
 import youtube_dl
-from PySide2.QtCore import Qt, QThread, Signal, Slot
+from PySide2.QtCore import Qt, QThread, Signal, Slot, QDir
 from PySide2.QtWidgets import QListWidgetItem, QMessageBox, QWidget
 from PySide2.QtGui import QPixmap
 from loguru import logger
 
+from settings import settings, DOWNLOAD_DIR
 from Ui_ItemWidget import Ui_ItemWidget
 
 class YouTubeDownloader(QThread):
@@ -29,6 +30,8 @@ class YouTubeDownloader(QThread):
         self.link: str = ''
 
         self.title: str = ''
+
+        self.download_dir: str = ''
 
     def run(self):
         if self.link == '':
@@ -60,7 +63,8 @@ class YouTubeDownloader(QThread):
             ydl_opts = {
                 'writethumbnail': True,
                 'logger': Logger(self),
-                'progress_hooks': [self.hooks]
+                'progress_hooks': [self.hooks],
+                'outtmpl': self.download_dir + QDir.separator() + '%(title)s.mp4',
             }
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([self.link])
@@ -93,8 +97,9 @@ class YouTubeDownloader(QThread):
     def thumbnail(self, filename):
         self.thumbnail_filename_signal.emit(filename)
 
-    def start_download(self, link: str):
+    def start_download(self, link: str, download_dir: str):
         self.link = link
+        self.download_dir = download_dir
 
 class ItemWidget(QWidget):
     on_complete_signal = Signal(QListWidgetItem)
@@ -104,6 +109,8 @@ class ItemWidget(QWidget):
 
         self.ui = Ui_ItemWidget()
         self.ui.setupUi(self)
+
+        self.settings = settings()
 
         self.youtube = YouTubeDownloader()
         self.youtube.progress_signal.connect(self.set_progress, Qt.QueuedConnection)
@@ -118,7 +125,7 @@ class ItemWidget(QWidget):
         self.thumbnail_filename = ''
 
     def start_download(self, link: str):
-        self.youtube.start_download(link)
+        self.youtube.start_download(link, QDir(self.settings.value(DOWNLOAD_DIR) if self.settings.contains(DOWNLOAD_DIR) else QDir.currentPath()).absolutePath())
         self.youtube.start()
 
     def set_title(self, name: str):
