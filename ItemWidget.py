@@ -3,6 +3,7 @@
 
 import traceback
 import re
+import os
 from datetime import datetime
 from time import strftime
 
@@ -114,6 +115,8 @@ class ItemWidget(QWidget):
 
         self.item = item
 
+        self.thumbnail_filename = ''
+
     def start_download(self, link: str):
         self.youtube.start_download(link)
         self.youtube.start()
@@ -125,6 +128,7 @@ class ItemWidget(QWidget):
         self.ui.labelInfo.setText(info)
 
     def set_thumbnail(self, filename: str):
+        self.thumbnail_filename = filename
         pixmap: QPixmap = QPixmap(filename)
         pixmap = pixmap.scaledToHeight(self.rect().height())
         self.ui.labelThumbnail.setPixmap(pixmap)
@@ -138,3 +142,4 @@ class ItemWidget(QWidget):
 
     def complete(self):
         self.on_complete_signal.emit(self.item)
+        os.remove(self.thumbnail_filename)
