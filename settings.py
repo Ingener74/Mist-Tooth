@@ -4,6 +4,7 @@
 from PySide2.QtCore import QSettings, QDir
 
 DOWNLOAD_DIR = 'download_dir'
+VLC_PATH = 'vlc_path'
 
 def settings():
     s = QSettings(QSettings.IniFormat, QSettings.UserScope, 'ShnaiderPavel', 'MistTooth')
