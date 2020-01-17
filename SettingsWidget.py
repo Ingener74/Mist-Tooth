@@ -25,7 +25,6 @@ class SettingsWidget(QWidget):
         
         self.ui.pushButtonChangeDownloadDir.clicked.connect(self.change_dir_pressed)
         self.ui.pushButtonOpenSettingsDir.clicked.connect(self.open_settings_dir_pressed)
-        self.ui.pushButtonOpenDownloadDir.clicked.connect(self.open_download_dir_pressed)
 
     def closeEvent(self, event):
         self.settings.setValue(self.SETTINGS_GEOMETRY, self.saveGeometry())
@@ -54,6 +53,3 @@ class SettingsWidget(QWidget):
 
     def open_settings_dir_pressed(self):
         QDesktopServices.openUrl(QFileInfo(self.settings.fileName()).dir().absolutePath())
-
-    def open_download_dir_pressed(self):
-        QDesktopServices.openUrl(QDir(self.settings.value(DOWNLOAD_DIR) if self.settings.contains(DOWNLOAD_DIR) else QDir.currentPath()).absolutePath())

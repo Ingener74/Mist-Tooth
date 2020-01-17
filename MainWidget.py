@@ -11,6 +11,9 @@ from settings import settings, DOWNLOAD_DIR
 
 
 class MainWidget(QWidget):
+    start_download_signal = Signal(str)
+    complete_download_signal = Signal(str)
+
     YOUTUBE_LINK_PATTERN = 'https://www.youtube.com/watch?v='
 
     def __init__(self, parent=None):
@@ -23,8 +26,6 @@ class MainWidget(QWidget):
 
         clipboard = QApplication.clipboard()
         clipboard.changed.connect(self.on_clipboard)
-
-        self.ui.pushButtonOpenDownloadDir.clicked.connect(self.open_download_dir_pressed)
 
     def closeEvent(self, event):
         self.settings.setValue('geom', self.saveGeometry())
@@ -53,6 +54,8 @@ class MainWidget(QWidget):
         clipboard.clear()
 
     def complete(self, item: QListWidgetItem):
+        widget: ItemWidget = self.ui.listWidget.itemWidget(item)
+        self.complete_download_signal.emit(widget.ui.labelTitle.text())
         self.ui.listWidget.takeItem(self.ui.listWidget.row(item))
 
     def add_download(self, link: str):
@@ -63,6 +66,4 @@ class MainWidget(QWidget):
         list_item.setSizeHint(download_item.sizeHint())
         self.ui.listWidget.setItemWidget(list_item, download_item)
         download_item.start_download(link)
-
-    def open_download_dir_pressed(self):
-        QDesktopServices.openUrl(QDir(self.settings.value(DOWNLOAD_DIR) if self.settings.contains(DOWNLOAD_DIR) else QDir.currentPath()).absolutePath())
+        self.start_download_signal.emit(link)
