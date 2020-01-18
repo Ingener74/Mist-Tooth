@@ -3,7 +3,7 @@
 
 if __name__ == "__main__":
     import sys
-    from PySide2.QtCore import QDir
+    from PySide2.QtCore import QDir, QUrl
     from PySide2.QtWidgets import QApplication, QAction, QSystemTrayIcon, QMenu
     from PySide2.QtGui import QPixmap, QDesktopServices, QIcon
     from MainWidget import MainWidget
@@ -27,7 +27,9 @@ if __name__ == "__main__":
     open_download_dir_action = QAction(QPixmap(':/main/open_dir.png'), 'Открыть каталог загрузки')
     def open_download_dir():
         s = settings()
-        QDesktopServices.openUrl(QDir(s.value(DOWNLOAD_DIR) if s.contains(DOWNLOAD_DIR) else QDir.currentPath()).absolutePath())
+        dir = s.value(DOWNLOAD_DIR) if s.contains(DOWNLOAD_DIR) else QDir.currentPath()
+        dir = f'file:///{dir}'
+        QDesktopServices.openUrl(QUrl(dir))
     open_download_dir_action.triggered.connect(open_download_dir)
     
     close_action = QAction(QPixmap(':/main/close.png'), 'Выключить')

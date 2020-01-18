@@ -9,5 +9,5 @@ VLC_PATH = 'vlc_path'
 def settings():
     s = QSettings(QSettings.IniFormat, QSettings.UserScope, 'ShnaiderPavel', 'MistTooth')
     if not s.contains(DOWNLOAD_DIR):
-        s.setValue(DOWNLOAD_DIR, QDir.currentPath().absolutePath())
+        s.setValue(DOWNLOAD_DIR, QDir.currentPath())
     return s

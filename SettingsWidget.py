@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
-from PySide2.QtCore import Qt, QTimerEvent, Slot, Signal, QDir, QFileInfo
+from PySide2.QtCore import Qt, QTimerEvent, Slot, Signal, QDir, QFileInfo, QUrl
 from PySide2.QtWidgets import QWidget, QListWidgetItem, QApplication, QMessageBox, QFileDialog
 from PySide2.QtGui import QKeyEvent, QDesktopServices
 from loguru import logger
@@ -56,7 +56,9 @@ class SettingsWidget(QWidget):
         self.ui.labelDownloadDir.setText(dir)
 
     def open_settings_dir_pressed(self):
-        QDesktopServices.openUrl(QFileInfo(self.settings.fileName()).dir().absolutePath())
+        dir = QFileInfo(self.settings.fileName()).dir().absolutePath()
+        dir = f'file:///{dir}'
+        QDesktopServices.openUrl(QUrl(dir))
 
     def change_vlc_path(self):
         file, filter = QFileDialog.getOpenFileName(self, 'Укажите путь к испольняемому файлу VLC', QDir.currentPath())
