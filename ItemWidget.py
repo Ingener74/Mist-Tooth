@@ -66,6 +66,7 @@ class YouTubeDownloader(QThread):
                 'progress_hooks': [self.hooks],
                 'outtmpl': self.download_dir + QDir.separator() + '%(title)s.mp4',
             }
+            logger.debug(ydl_opts)
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([self.link])
 
@@ -75,7 +76,7 @@ class YouTubeDownloader(QThread):
             self.error_signal.emit(str(e))
 
     def hooks(self, data):
-        # logger.info(data)
+        logger.info(data)
         if 'filename' in data:
             if data['filename'] != self.title:
                 self.title = data['filename']
@@ -122,7 +123,7 @@ class ItemWidget(QWidget):
 
         self.item = item
 
-        self.thumbnail_filename = ''
+        self.thumbnail_filename = '' 
 
     def start_download(self, link: str):
         self.youtube.start_download(link, QDir(self.settings.value(DOWNLOAD_DIR) if self.settings.contains(DOWNLOAD_DIR) else QDir.currentPath()).absolutePath())

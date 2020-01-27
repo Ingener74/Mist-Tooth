@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from PySide2.QtCore import Qt, QTimerEvent, Slot, Signal, QDir
+from PySide2.QtCore import Qt, QTimerEvent, Slot, Signal, QDir, QSysInfo
 from PySide2.QtWidgets import QWidget, QListWidgetItem, QApplication, QMessageBox
 from PySide2.QtGui import QKeyEvent, QDesktopServices
 
 from Ui_MainWidget import Ui_MainWidget
 from ItemWidget import ItemWidget
 from settings import settings, DOWNLOAD_DIR
+from logger import logger
 
 
 class MainWidget(QWidget):
@@ -24,11 +25,18 @@ class MainWidget(QWidget):
 
         self.settings = settings()
 
-        clipboard = QApplication.clipboard()
-        clipboard.changed.connect(self.on_clipboard)
+        self.clipboard = QApplication.clipboard()
+
+        if QSysInfo.productType() == 'osx':
+            logger.debug('Clipboard mode: on timer')
+            self.clipboard_update_timer = self.startTimer(100)
+        else:
+            logger.debug('Clipboard mode: on clipboard change')
+            self.clipboard.changed.connect(self.on_clipboard)
 
     def closeEvent(self, event):
         self.settings.setValue('geom', self.saveGeometry())
+        self.killTimer(self.clipboard_update_timer)
 
     def showEvent(self, event):
         if self.settings.contains('geom'):
@@ -40,18 +48,28 @@ class MainWidget(QWidget):
         else:
             event.ignore()
 
+    def timerEvent(self, event: QTimerEvent):
+        if event.timerId() == self.clipboard_update_timer:
+            text = QApplication.clipboard().text()
+            if text:
+                self.add_download_from_text(text)
+                self.clipboard.clear()
+
     def on_clipboard(self, mode):
-        clipboard = self.sender()
-        text_from_clipboard = clipboard.text()
+        text_from_clipboard = self.clipboard.text()
+        self.add_download_from_text(text_from_clipboard)
+        self.clipboard.clear()
 
-        if text_from_clipboard == '':
+    def add_download_from_text(self, text: str):
+        if not text:
+            logger.debug('Empty text')
             return
 
-        if not text_from_clipboard.startswith(self.YOUTUBE_LINK_PATTERN):
+        if not text.startswith(self.YOUTUBE_LINK_PATTERN):
+            logger.debug("Text doesn't starts with youtube pattern")
             return
 
-        self.add_download(text_from_clipboard)
-        clipboard.clear()
+        self.add_download(text)
 
     def complete(self, item: QListWidgetItem):
         widget: ItemWidget = self.ui.listWidget.itemWidget(item)
