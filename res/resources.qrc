@@ -1,6 +1,7 @@
 <RCC>
   <qresource prefix="/main">
     <file>arrow.png</file>
+    <file>loading.png</file>
     <file>vlc.png</file>
     <file>close.png</file>
     <file>open_dir.png</file>

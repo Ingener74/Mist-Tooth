@@ -9,13 +9,16 @@ from time import strftime
 
 # import requests
 import youtube_dl
-from PySide2.QtCore import Qt, QThread, Signal, Slot, QDir
+from PySide2.QtCore import Qt, QThread, Signal, Slot, QDir, QMutex
 from PySide2.QtWidgets import QListWidgetItem, QMessageBox, QWidget
 from PySide2.QtGui import QPixmap
 from loguru import logger
 
 from settings import settings, DOWNLOAD_DIR
 from Ui_ItemWidget import Ui_ItemWidget
+
+class StopError(RuntimeError):
+    pass
 
 class YouTubeDownloader(QThread):
     progress_signal = Signal(int)
@@ -32,6 +35,9 @@ class YouTubeDownloader(QThread):
         self.title: str = ''
 
         self.download_dir: str = ''
+
+        self.stop_mutex = QMutex()
+        self.stop = False
 
     def run(self):
         if self.link == '':
@@ -69,13 +75,18 @@ class YouTubeDownloader(QThread):
             logger.debug(ydl_opts)
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([self.link])
+        except StopError:
+            logger.debug('Stopped')
+            self.complete_signal.emit()
 
         except Exception as e:
-            print('Exception: ' + str(e))
-            print(traceback.print_exc())
+            logger.error('Exception: ' + str(e))
+            logger.error(traceback.print_exc())
             self.error_signal.emit(str(e))
 
     def hooks(self, data):
+        if self.is_stop:
+            raise StopError
         logger.info(data)
         if 'filename' in data:
             if data['filename'] != self.title:
@@ -102,6 +113,23 @@ class YouTubeDownloader(QThread):
         self.link = link
         self.download_dir = download_dir
 
+    @property
+    def is_stop(self):
+        stop_ = False
+        try:
+            self.stop_mutex.lock()
+            stop_ = self.stop
+        finally:
+            self.stop_mutex.unlock()
+        return stop_
+        
+    def stop_download(self):
+        try:
+            self.stop_mutex.lock()
+            self.stop = True
+        finally:
+            self.stop_mutex.unlock()
+
 class ItemWidget(QWidget):
     on_complete_signal = Signal(QListWidgetItem)
 
@@ -121,6 +149,8 @@ class ItemWidget(QWidget):
         self.youtube.complete_signal.connect(self.complete, Qt.QueuedConnection)
         self.youtube.thumbnail_filename_signal.connect(self.set_thumbnail, Qt.QueuedConnection)
 
+        self.ui.pushButtonStop.clicked.connect(self.youtube.stop_download)
+
         self.item = item
 
         self.thumbnail_filename = '' 
@@ -138,7 +168,7 @@ class ItemWidget(QWidget):
     def set_thumbnail(self, filename: str):
         self.thumbnail_filename = filename
         pixmap: QPixmap = QPixmap(filename)
-        pixmap = pixmap.scaledToHeight(self.rect().height())
+        pixmap = pixmap.scaledToHeight(self.ui.labelThumbnail.height())
         self.ui.labelThumbnail.setPixmap(pixmap)
 
     def set_progress(self, progress: int):
