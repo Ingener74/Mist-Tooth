@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>645</width>
-    <height>124</height>
+    <width>182</width>
+    <height>121</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -29,7 +29,7 @@
       </size>
      </property>
      <property name="text">
-      <string/>
+      <string>Thumbnail</string>
      </property>
      <property name="pixmap">
       <pixmap resource="resources.qrc">:/main/loading.png</pixmap>
@@ -37,11 +37,11 @@
     </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <layout class="QVBoxLayout" name="verticalLayout">
+        <layout class="QVBoxLayout" name="verticalLayout_2">
          <item>
           <widget class="QLabel" name="labelTitle">
            <property name="text">
@@ -59,39 +59,44 @@
         </layout>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButtonStop">
-         <property name="minimumSize">
-          <size>
-           <width>46</width>
-           <height>42</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>46</width>
-           <height>42</height>
-          </size>
-         </property>
-         <property name="toolTip">
-          <string>Остановить</string>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="icon">
-          <iconset resource="resources.qrc">
-           <normaloff>:/main/close.png</normaloff>:/main/close.png</iconset>
-         </property>
-         <property name="iconSize">
-          <size>
-           <width>16</width>
-           <height>16</height>
-          </size>
-         </property>
-         <property name="shortcut">
-          <string>Ctrl+S</string>
-         </property>
-        </widget>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QPushButton" name="pushButtonStop">
+           <property name="toolTip">
+            <string>Остановить</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="resources.qrc">
+             <normaloff>:/main/close.png</normaloff>:/main/close.png</iconset>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>16</width>
+             <height>16</height>
+            </size>
+           </property>
+           <property name="shortcut">
+            <string>Ctrl+S</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>
