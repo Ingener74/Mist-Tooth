@@ -11,8 +11,14 @@ if __name__ == "__main__":
     from settings import settings, DOWNLOAD_DIR
     from loguru import logger
 
+    from ItemWidget import ItemWidget
+
     app = QApplication(sys.argv)
     app.setQuitOnLastWindowClosed(False)
+
+    # iw = ItemWidget(None)
+    # iw.show()
+    # iw.set_thumbnail('path to image')
 
     main_widget = MainWidget()
     settings_widget = SettingsWidget()

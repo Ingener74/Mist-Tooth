@@ -36,7 +36,8 @@ class MainWidget(QWidget):
 
     def closeEvent(self, event):
         self.settings.setValue('geom', self.saveGeometry())
-        self.killTimer(self.clipboard_update_timer)
+        if QSysInfo.productType() == 'osx':
+            self.killTimer(self.clipboard_update_timer)
 
     def showEvent(self, event):
         if self.settings.contains('geom'):
@@ -62,7 +63,7 @@ class MainWidget(QWidget):
 
     def add_download_from_text(self, text: str):
         if not text:
-            logger.debug('Empty text')
+            # logger.debug('Empty text')
             return
 
         if not text.startswith(self.YOUTUBE_LINK_PATTERN):

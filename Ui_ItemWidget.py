@@ -20,11 +20,7 @@ class Ui_ItemWidget(object):
         if ItemWidget.objectName():
             ItemWidget.setObjectName(u"ItemWidget")
         ItemWidget.resize(182, 121)
-        sizePolicy = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Maximum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(ItemWidget.sizePolicy().hasHeightForWidth())
-        ItemWidget.setSizePolicy(sizePolicy)
+        ItemWidget.setMaximumSize(QSize(16777215, 121))
         self.horizontalLayout_2 = QHBoxLayout(ItemWidget)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.labelThumbnail = QLabel(ItemWidget)
@@ -71,6 +67,7 @@ class Ui_ItemWidget(object):
 
         self.horizontalLayout.addLayout(self.verticalLayout)
 
+        self.horizontalLayout.setStretch(0, 1)
 
         self.verticalLayout_3.addLayout(self.horizontalLayout)
 
