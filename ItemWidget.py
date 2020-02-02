@@ -147,13 +147,15 @@ class ItemWidget(QWidget):
         self.youtube.info_signal.connect(self.set_info, Qt.QueuedConnection)
         # self.youtube.error_signal.connect(self.error, Qt.QueuedConnection)
         self.youtube.complete_signal.connect(self.complete, Qt.QueuedConnection)
-        self.youtube.thumbnail_filename_signal.connect(self.set_thumbnail, Qt.QueuedConnection)
+        self.youtube.thumbnail_filename_signal.connect(self.set_thumbnail_from_file, Qt.QueuedConnection)
 
         self.ui.pushButtonStop.clicked.connect(self.youtube.stop_download)
 
         self.item = item
 
-        self.thumbnail_filename = '' 
+        self.thumbnail_filename = ''
+        self.set_thumbnail_from_file(':/main/loading.png')
+        self.ui.labelInfo.setText('')
 
     def start_download(self, link: str):
         self.youtube.start_download(link, QDir(self.settings.value(DOWNLOAD_DIR) if self.settings.contains(DOWNLOAD_DIR) else QDir.currentPath()).absolutePath())
@@ -165,9 +167,12 @@ class ItemWidget(QWidget):
     def set_info(self, info: str):
         self.ui.labelInfo.setText(info)
 
-    def set_thumbnail(self, filename: str):
+    def set_thumbnail_from_file(self, filename: str):
         self.thumbnail_filename = filename
         pixmap: QPixmap = QPixmap(filename)
+        self.set_thumbnail(pixmap)
+
+    def set_thumbnail(self, pixmap: QPixmap):
         pixmap = pixmap.scaledToHeight(self.ui.labelThumbnail.height())
         self.ui.labelThumbnail.setPixmap(pixmap)
 
