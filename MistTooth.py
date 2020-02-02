@@ -8,6 +8,7 @@ if __name__ == "__main__":
     from PySide2.QtGui import QPixmap, QDesktopServices, QIcon
     from MainWidget import MainWidget
     from SettingsWidget import SettingsWidget
+    from NotificationWidget import NotificationWidget
     from settings import settings, DOWNLOAD_DIR
     from loguru import logger
 
@@ -22,6 +23,9 @@ if __name__ == "__main__":
 
     main_widget = MainWidget()
     settings_widget = SettingsWidget()
+    notification_widget = NotificationWidget()
+
+    # notification_widget.show()
 
     show_window_action = QAction(QPixmap(':/main/icon.png'), 'Показать Youtube Downloader')
     def show_main_window():
