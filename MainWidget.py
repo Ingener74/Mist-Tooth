@@ -27,17 +27,11 @@ class MainWidget(QWidget):
 
         self.clipboard = QApplication.clipboard()
 
-        if QSysInfo.productType() == 'osx':
-            logger.debug('Clipboard mode: on timer')
-            self.clipboard_update_timer = self.startTimer(100)
-        else:
-            logger.debug('Clipboard mode: on clipboard change')
-            self.clipboard.changed.connect(self.on_clipboard)
+        self.clipboard_update_timer = self.startTimer(100)
 
     def closeEvent(self, event):
         self.settings.setValue('geom', self.saveGeometry())
-        if QSysInfo.productType() == 'osx':
-            self.killTimer(self.clipboard_update_timer)
+        self.killTimer(self.clipboard_update_timer)
 
     def showEvent(self, event):
         if self.settings.contains('geom'):
@@ -51,9 +45,8 @@ class MainWidget(QWidget):
 
     def timerEvent(self, event: QTimerEvent):
         if event.timerId() == self.clipboard_update_timer:
-            text = QApplication.clipboard().text()
-            if text:
-                self.add_download_from_text(text)
+            text = self.clipboard.text()
+            if text and self.add_download_from_text(text):
                 self.clipboard.clear()
 
     def on_clipboard(self, mode):
@@ -63,14 +56,14 @@ class MainWidget(QWidget):
 
     def add_download_from_text(self, text: str):
         if not text:
-            # logger.debug('Empty text')
-            return
+            return False
 
         if not text.startswith(self.YOUTUBE_LINK_PATTERN):
             logger.debug("Text doesn't starts with youtube pattern")
-            return
+            return False
 
         self.add_download(text)
+        return True
 
     def complete(self, item: QListWidgetItem):
         widget: ItemWidget = self.ui.listWidget.itemWidget(item)
