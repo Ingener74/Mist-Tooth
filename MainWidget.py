@@ -3,7 +3,7 @@
 
 from PySide2.QtCore import Qt, QTimerEvent, Slot, Signal, QDir, QSysInfo
 from PySide2.QtWidgets import QWidget, QListWidgetItem, QApplication, QMessageBox
-from PySide2.QtGui import QKeyEvent, QDesktopServices
+from PySide2.QtGui import QKeyEvent, QDesktopServices, QPixmap
 
 from Ui_MainWidget import Ui_MainWidget
 from ItemWidget import ItemWidget
@@ -13,9 +13,9 @@ from logger import logger
 
 class MainWidget(QWidget):
     start_download_signal = Signal(str)
-    complete_download_signal = Signal(str)
+    complete_download_signal = Signal(str, QPixmap)
 
-    YOUTUBE_LINK_PATTERN = 'https://www.youtube.com/watch?v='
+    LINK_PATTERNS = ['https://www.youtube.com/watch?v=', 'https://youtu.be/']
 
     def __init__(self, parent=None):
         super(MainWidget, self).__init__(parent)
@@ -31,7 +31,7 @@ class MainWidget(QWidget):
 
     def closeEvent(self, event):
         self.settings.setValue('geom', self.saveGeometry())
-        self.killTimer(self.clipboard_update_timer)
+        # self.killTimer(self.clipboard_update_timer)
 
     def showEvent(self, event):
         if self.settings.contains('geom'):
@@ -58,16 +58,18 @@ class MainWidget(QWidget):
         if not text:
             return False
 
-        if not text.startswith(self.YOUTUBE_LINK_PATTERN):
-            logger.debug("Text doesn't starts with youtube pattern")
-            return False
+        for pattern in self.LINK_PATTERNS:
+            if text.startswith(pattern):
+                break
+        else:
+            return False        
 
         self.add_download(text)
         return True
 
-    def complete(self, item: QListWidgetItem):
+    def complete(self, item: QListWidgetItem, thumbnail: QPixmap):
         widget: ItemWidget = self.ui.listWidget.itemWidget(item)
-        self.complete_download_signal.emit(widget.ui.labelTitle.text())
+        self.complete_download_signal.emit(widget.ui.labelTitle.text(), thumbnail)
         self.ui.listWidget.takeItem(self.ui.listWidget.row(item))
 
     def add_download(self, link: str):

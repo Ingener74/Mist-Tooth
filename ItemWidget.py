@@ -131,7 +131,7 @@ class YouTubeDownloader(QThread):
             self.stop_mutex.unlock()
 
 class ItemWidget(QWidget):
-    on_complete_signal = Signal(QListWidgetItem)
+    on_complete_signal = Signal(QListWidgetItem, QPixmap)
 
     def __init__(self, item, parent=None):
         super(ItemWidget, self).__init__(parent)
@@ -184,5 +184,5 @@ class ItemWidget(QWidget):
         self.on_complete_signal.emit(self.item)
 
     def complete(self):
-        self.on_complete_signal.emit(self.item)
+        self.on_complete_signal.emit(self.item, self.ui.labelThumbnail.pixmap())
         os.remove(self.thumbnail_filename)

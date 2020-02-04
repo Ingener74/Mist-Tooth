@@ -61,7 +61,7 @@ class Ui_NotificationWidget(object):
     # setupUi
 
     def retranslateUi(self, NotificationWidget):
-        NotificationWidget.setWindowTitle(QCoreApplication.translate("NotificationWidget", u"Form", None))
+        NotificationWidget.setWindowTitle(QCoreApplication.translate("NotificationWidget", u"\u0423\u0432\u0435\u0434\u043e\u043c\u043b\u0435\u043d\u0438\u0435", None))
         self.labelThumbnail.setText(QCoreApplication.translate("NotificationWidget", u"Thumbnail", None))
         self.labelTitle.setText(QCoreApplication.translate("NotificationWidget", u"Title", None))
         self.labelIcon.setText(QCoreApplication.translate("NotificationWidget", u"Icon", None))

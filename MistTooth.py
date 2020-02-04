@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-if __name__ == "__main__":
+from loguru import logger
+
+@logger.catch
+def main():
     import sys
     from PySide2.QtCore import QDir, QUrl
     from PySide2.QtWidgets import QApplication, QAction, QSystemTrayIcon, QMenu
@@ -10,7 +13,6 @@ if __name__ == "__main__":
     from SettingsWidget import SettingsWidget
     from NotificationWidget import NotificationWidget
     from settings import settings, DOWNLOAD_DIR
-    from loguru import logger
 
     from ItemWidget import ItemWidget
 
@@ -25,6 +27,7 @@ if __name__ == "__main__":
     settings_widget = SettingsWidget()
     notification_widget = NotificationWidget()
 
+    # notification_widget.title = 'Foo'
     # notification_widget.show()
 
     show_window_action = QAction(QPixmap(':/main/icon.png'), 'Показать Youtube Downloader')
@@ -54,11 +57,16 @@ if __name__ == "__main__":
     system_tray = QSystemTrayIcon(QPixmap(':/main/icon.png'))
     system_tray.setContextMenu(tray_menu)
 
-    def show_complete(title):
-        system_tray.showMessage('Закончено скачивание', title, QIcon(QPixmap(':/main/icon.png')))
+    def show_complete(title, thumbnail):
+        notification_widget.title = title
+        notification_widget.thumbnail = thumbnail
+        notification_widget.show()
+        # system_tray.showMessage('Закончено скачивание', title, QIcon(QPixmap(':/main/icon.png')))
 
     def show_start_download(link):
-        system_tray.showMessage('Началось скачивание', link, QIcon(QPixmap(':/main/icon.png')))
+        notification_widget.title = link
+        notification_widget.show()
+        # system_tray.showMessage('Началось скачивание', link, QIcon(QPixmap(':/main/icon.png')))
     
     main_widget.ui.pushButtonSettings.clicked.connect(settings_widget.show)
     main_widget.ui.pushButtonOpenDownloadDir.clicked.connect(open_download_dir)
@@ -70,3 +78,6 @@ if __name__ == "__main__":
     system_tray.show()
 
     sys.exit(app.exec_())
+
+if __name__ == "__main__":
+    main()
