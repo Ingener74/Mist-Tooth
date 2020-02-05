@@ -3,9 +3,11 @@
 
 from PySide2.QtWidgets import QWidget
 from PySide2.QtGui import QShowEvent, QPixmap
-from PySide2.QtCore import QTimerEvent, Qt
+from PySide2.QtCore import QTimerEvent, Qt, QRect, QPoint
 
 from Ui_NotificationWidget import Ui_NotificationWidget
+
+from loguru import logger
 
 class NotificationWidget(QWidget):
     def __init__(self, parent=None):
@@ -20,8 +22,13 @@ class NotificationWidget(QWidget):
 
         self.hide_timer = None
 
+        self.__move_to: QRect = None
+
     def showEvent(self, event: QShowEvent):
-        self.hide_timer = self.startTimer(2000)
+        self.hide_timer = self.startTimer(3000)
+        if self.__move_to:
+            p = self.__move_to.center() - QPoint(self.width() / 2, self.height() + 24)
+            self.move(p)
 
     def timerEvent(self, event: QTimerEvent):
         if self.hide_timer is not None and event.timerId() == self.hide_timer:
@@ -43,3 +50,11 @@ class NotificationWidget(QWidget):
     @thumbnail.setter
     def thumbnail(self, thumbnail: QPixmap):
         self.ui.labelThumbnail.setPixmap(thumbnail)
+
+    @property
+    def move_to(self):
+        return self.__move_to
+
+    @move_to.setter
+    def move_to(self, move_to):
+        self.__move_to = move_to

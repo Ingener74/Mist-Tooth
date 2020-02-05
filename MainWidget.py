@@ -31,7 +31,9 @@ class MainWidget(QWidget):
 
     def closeEvent(self, event):
         self.settings.setValue('geom', self.saveGeometry())
-        # self.killTimer(self.clipboard_update_timer)
+
+    def on_close(self):
+        self.killTimer(self.clipboard_update_timer)
 
     def showEvent(self, event):
         if self.settings.contains('geom'):
