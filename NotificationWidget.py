@@ -35,6 +35,15 @@ class NotificationWidget(QWidget):
             self.hide()
             self.killTimer(self.hide_timer)
 
+    def show_(self, *, title: str = '', thumbnail: QPixmap = None, move_to: QRect = None):
+        self.ui.labelTitle.setText(title)
+        if thumbnail:
+            self.ui.labelThumbnail.setPixmap(thumbnail)
+        if move_to:
+            self.__move_to = move_to
+        self.show()
+        self.activateWindow()
+
     @property
     def title(self):
         return self.ui.labelTitle.text()

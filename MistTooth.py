@@ -63,19 +63,11 @@ def main():
     system_tray.setContextMenu(tray_menu)
 
     def show_complete(title, thumbnail):
-        logger.debug(system_tray.geometry())
-        notification_widget.title = title
-        notification_widget.thumbnail = thumbnail
-        notification_widget.move_to = system_tray.geometry()
-        notification_widget.show()
-        # system_tray.showMessage('Закончено скачивание', title, QIcon(QPixmap(':/main/icon.png')))
+        notification_widget.show_(title=title, thumbnail=thumbnail, move_to=system_tray.geometry())
 
     def show_start_download(link):
-        notification_widget.title = link
-        notification_widget.move_to = system_tray.geometry()
-        notification_widget.show()
-        # system_tray.showMessage('Началось скачивание', link, QIcon(QPixmap(':/main/icon.png')))
-    
+        notification_widget.show_(title=link, move_to=system_tray.geometry())
+
     main_widget.ui.pushButtonSettings.clicked.connect(settings_widget.show)
     main_widget.ui.pushButtonOpenDownloadDir.clicked.connect(open_download_dir)
     main_widget.start_download_signal.connect(show_start_download)
@@ -91,6 +83,7 @@ def main():
     # notification_widget.move_to = system_tray.geometry()
     # notification_widget.thumbnail = QPixmap(':/main/loading.png').scaled(100, 100)
     # notification_widget.show()
+    notification_widget.show_(title='Foo', move_to=system_tray.geometry())
 
     sys.exit(app.exec_())
 
