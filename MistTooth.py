@@ -79,11 +79,7 @@ def main():
 
     logger.debug(system_tray.geometry())
 
-    # notification_widget.title = 'Foo'
-    # notification_widget.move_to = system_tray.geometry()
-    # notification_widget.thumbnail = QPixmap(':/main/loading.png').scaled(100, 100)
-    # notification_widget.show()
-    notification_widget.show_(title='Foo', move_to=system_tray.geometry())
+    # notification_widget.show_(title='Foo', move_to=system_tray.geometry())
 
     sys.exit(app.exec_())
 
