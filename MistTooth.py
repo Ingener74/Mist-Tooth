@@ -60,10 +60,10 @@ def main():
     system_tray.setContextMenu(tray_menu)
 
     def show_complete(title, thumbnail):
-        notification_widget.show_(title=title, thumbnail=thumbnail, move_to=system_tray.geometry())
+        notification_widget.show_(title=title, thumbnail=thumbnail, move_to=system_tray.geometry(), app=app)
 
     def show_start_download(link):
-        notification_widget.show_(title=link, move_to=system_tray.geometry())
+        notification_widget.show_(title=link, move_to=system_tray.geometry(), app=app)
 
     main_widget.ui.pushButtonSettings.clicked.connect(settings_widget.show)
     main_widget.ui.pushButtonOpenDownloadDir.clicked.connect(open_download_dir)
@@ -76,7 +76,7 @@ def main():
 
     logger.debug(system_tray.geometry())
 
-    # notification_widget.show_(title='Foo', move_to=system_tray.geometry())
+    # notification_widget.show_(title='Foo', move_to=system_tray.geometry(), app=app)
     # notification_widget.show_(title='Foo')
 
     sys.exit(app.exec_())

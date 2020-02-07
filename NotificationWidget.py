@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from PySide2.QtWidgets import QWidget
-from PySide2.QtGui import QShowEvent, QPixmap, QPainterPath, QRegion
+from PySide2.QtWidgets import QWidget, QApplication
+from PySide2.QtGui import QShowEvent, QPixmap, QPainterPath, QRegion, QScreen
 from PySide2.QtCore import QTimerEvent, Qt, QRect, QPoint, QRectF
 
 from Ui_NotificationWidget import Ui_NotificationWidget
@@ -36,12 +36,19 @@ class NotificationWidget(QWidget):
             self.hide()
             self.killTimer(self.hide_timer)
 
-    def show_(self, *, title: str = '', thumbnail: QPixmap = None, move_to: QRect = None):
+    def show_(self, *, title: str = '', thumbnail: QPixmap = None, move_to: QRect = None, app: QApplication = None):
         self.ui.labelTitle.setText(title)
         if thumbnail:
             self.ui.labelThumbnail.setPixmap(thumbnail)
-        if move_to:
-            p = move_to.center() - QPoint(self.width() / 2, self.height() + 24)
+        if move_to and app:
+            for screen in app.screens():
+                if screen.geometry().contains(move_to):
+                    break
+            if move_to.center().y() > screen.geometry().height() / 2:
+                p = move_to.center() - QPoint(self.width() / 2, self.height() + 24)
+            else:
+                p = move_to.center() + QPoint(- self.width() / 2, 24)
+            # p = move_to.center() - QPoint(self.width() / 2, self.height() + 24)
             self.move(p)
         self.hide_timer = self.startTimer(3000)
         self.show()
