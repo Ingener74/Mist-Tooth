@@ -32,9 +32,6 @@ def main():
 
     app.aboutToQuit.connect(main_widget.on_close)
 
-    # notification_widget.title = 'Foo'
-    # notification_widget.show()
-
     show_window_action = QAction(QPixmap(':/main/icon.png'), 'Показать Youtube Downloader')
     def show_main_window():
         main_widget.show()
@@ -80,6 +77,7 @@ def main():
     logger.debug(system_tray.geometry())
 
     # notification_widget.show_(title='Foo', move_to=system_tray.geometry())
+    # notification_widget.show_(title='Foo')
 
     sys.exit(app.exec_())
 
