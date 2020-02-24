@@ -3,7 +3,7 @@
 
 from PySide2.QtCore import Qt, QTimerEvent, Slot, Signal, QDir, QSysInfo
 from PySide2.QtWidgets import QWidget, QListWidgetItem, QApplication, QMessageBox
-from PySide2.QtGui import QKeyEvent, QDesktopServices, QPixmap
+from PySide2.QtGui import QKeyEvent, QDesktopServices, QPixmap, QDropEvent
 
 from Ui_MainWidget import Ui_MainWidget
 from ItemWidget import ItemWidget
@@ -50,6 +50,9 @@ class MainWidget(QWidget):
             text = self.clipboard.text()
             if text and self.add_download_from_text(text):
                 self.clipboard.clear()
+
+    def dropEvent(self, event: QDropEvent):
+        pass
 
     def on_clipboard(self, mode):
         text_from_clipboard = self.clipboard.text()

@@ -20,16 +20,17 @@ class NotificationWidget(QWidget):
         self.ui.labelIcon.setText('')
         self.ui.labelTitle.setText('')
 
+        self.hide_timer = None
+
+    def showEvent(self, event: QShowEvent):
+        pass
+
+    def resizeEvent(self, event):
         radius = 8
         path = QPainterPath()
         path.addRoundedRect(QRectF(self.rect()), radius, radius)
         mask = QRegion(path.toFillPolygon().toPolygon())
         self.setMask(mask)
-
-        self.hide_timer = None
-
-    def showEvent(self, event: QShowEvent):
-        pass
 
     def timerEvent(self, event: QTimerEvent):
         if self.hide_timer is not None and event.timerId() == self.hide_timer:
@@ -40,6 +41,8 @@ class NotificationWidget(QWidget):
         self.ui.labelTitle.setText(title)
         if thumbnail:
             self.ui.labelThumbnail.setPixmap(thumbnail)
+        else:
+            self.ui.labelThumbnail.clear()
         if move_to and app:
             for screen in app.screens():
                 if screen.geometry().contains(move_to):

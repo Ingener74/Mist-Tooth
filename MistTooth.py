@@ -9,12 +9,13 @@ def main():
     from PySide2.QtCore import QDir, QUrl
     from PySide2.QtWidgets import QApplication, QAction, QSystemTrayIcon, QMenu
     from PySide2.QtGui import QPixmap, QDesktopServices, QIcon, QScreen
+    
     from MainWidget import MainWidget
     from SettingsWidget import SettingsWidget
     from NotificationWidget import NotificationWidget
-    from settings import settings, DOWNLOAD_DIR
-
     from ItemWidget import ItemWidget
+    from settings import settings, DOWNLOAD_DIR
+    from Notifications import Notification
 
     app = QApplication(sys.argv)
     app.setQuitOnLastWindowClosed(False)
@@ -60,10 +61,10 @@ def main():
     system_tray.setContextMenu(tray_menu)
 
     def show_complete(title, thumbnail):
-        notification_widget.show_(title=title, thumbnail=thumbnail, move_to=system_tray.geometry(), app=app)
+        notification.show_notification('Закончено скачивание', title)
 
     def show_start_download(link):
-        notification_widget.show_(title=link, move_to=system_tray.geometry(), app=app)
+        notification.show_notification('Начинается скачивание', link)
 
     main_widget.ui.pushButtonSettings.clicked.connect(settings_widget.show)
     main_widget.ui.pushButtonOpenDownloadDir.clicked.connect(open_download_dir)
@@ -74,10 +75,9 @@ def main():
     main_widget.show()
     system_tray.show()
 
-    logger.debug(system_tray.geometry())
+    notification = Notification(system_tray)
 
-    # notification_widget.show_(title='Foo', move_to=system_tray.geometry(), app=app)
-    # notification_widget.show_(title='Foo')
+    # notification.show_notification('Youtube', 'Foo')
 
     sys.exit(app.exec_())
 

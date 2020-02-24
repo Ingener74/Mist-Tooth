@@ -79,6 +79,10 @@ class YouTubeDownloader(QThread):
             logger.debug('Stopped')
             self.complete_signal.emit()
 
+        except youtube_dl.utils.DownloadError as e:
+            logger.error('Download error')
+            self.complete_signal.emit()
+
         except Exception as e:
             logger.error('Exception: ' + str(e))
             logger.error(traceback.print_exc())
@@ -91,7 +95,9 @@ class YouTubeDownloader(QThread):
         if 'filename' in data:
             if data['filename'] != self.title:
                 self.title = data['filename']
-                self.title_signal.emit(self.title)
+
+                file_name = os.path.basename(self.title)
+                self.title_signal.emit(file_name)
 
         if 'status' in data:
             if data['status'] == 'downloading':
