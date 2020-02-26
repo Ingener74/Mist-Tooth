@@ -3,7 +3,7 @@
 
 from PySide2.QtCore import Qt, QTimerEvent, Slot, Signal, QDir, QSysInfo
 from PySide2.QtWidgets import QWidget, QListWidgetItem, QApplication, QMessageBox
-from PySide2.QtGui import QKeyEvent, QDesktopServices, QPixmap, QDropEvent
+from PySide2.QtGui import QKeyEvent, QDesktopServices, QPixmap, QDropEvent, QDragEnterEvent
 
 from Ui_MainWidget import Ui_MainWidget
 from ItemWidget import ItemWidget
@@ -29,6 +29,8 @@ class MainWidget(QWidget):
 
         self.clipboard_update_timer = self.startTimer(100)
 
+        self.setAcceptDrops(True)
+
     def closeEvent(self, event):
         self.settings.setValue('geom', self.saveGeometry())
 
@@ -51,8 +53,12 @@ class MainWidget(QWidget):
             if text and self.add_download_from_text(text):
                 self.clipboard.clear()
 
+    def dragEnterEvent(self, event: QDragEnterEvent):
+        event.acceptProposedAction()
+
     def dropEvent(self, event: QDropEvent):
-        pass
+        if event.mimeData().hasUrls():
+            self.add_download_from_text(event.mimeData().text())
 
     def on_clipboard(self, mode):
         text_from_clipboard = self.clipboard.text()

@@ -4,6 +4,7 @@
 from PySide2.QtCore import (
     QObject, 
     QSysInfo)
+from PySide2.QtWidgets import QSystemTrayIcon
 from logger import logger
 import subprocess as sp
 from io import StringIO
@@ -23,3 +24,10 @@ class Notification(QObject):
         if QSysInfo.kernelType() == 'darwin':
             proc = sp.Popen('osascript', stdin=sp.PIPE)
             proc.communicate(input=f'display notification \"{text}\" with title \"{title}\"'.encode())
+        elif QSysInfo.kernelType() == 'winnt':
+            if QSysInfo.kernelVersion().startswith('10'):
+                pass
+            else:
+                logger.error(f'Notification system not implemented for {QSysInfo.kernelType()}, {QSysInfo.kernelVersion()}')
+        else:
+            logger.error(f'Notification system not implemented for {QSysInfo.kernelType()}, {QSysInfo.kernelVersion()}')

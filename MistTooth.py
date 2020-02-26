@@ -57,7 +57,7 @@ def main():
     tray_menu.addSeparator()
     tray_menu.addAction(close_action)
 
-    system_tray = QSystemTrayIcon(QPixmap(':/main/icon.png'))
+    system_tray = QSystemTrayIcon(main_widget, QPixmap(':/main/icon.png'))
     system_tray.setContextMenu(tray_menu)
 
     def show_complete(title, thumbnail):
