@@ -26,7 +26,11 @@ class Notification(QObject):
             proc.communicate(input=f'display notification \"{text}\" with title \"{title}\"'.encode())
         elif QSysInfo.kernelType() == 'winnt':
             if QSysInfo.kernelVersion().startswith('10'):
-                pass
+                version = QSysInfo.kernelVersion().split('.')
+                if int(version[2] > 17763):
+                    logger.error(f'Notification system not implemented for {QSysInfo.kernelType()}, {QSysInfo.kernelVersion()}')
+                else:
+                    self.system_tray.showMessage(title, text)
             else:
                 logger.error(f'Notification system not implemented for {QSysInfo.kernelType()}, {QSysInfo.kernelVersion()}')
         else:

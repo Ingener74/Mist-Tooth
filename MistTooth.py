@@ -6,22 +6,22 @@ from loguru import logger
 @logger.catch
 def main():
     import sys
-    from PySide2.QtCore import QDir, QUrl
+    from PySide2.QtCore import QDir, QUrl, QSysInfo
     from PySide2.QtWidgets import QApplication, QAction, QSystemTrayIcon, QMenu
     from PySide2.QtGui import QPixmap, QDesktopServices, QIcon, QScreen
     
     from MainWidget import MainWidget
     from SettingsWidget import SettingsWidget
-    from NotificationWidget import NotificationWidget
+    # from NotificationWidget import NotificationWidget
     from ItemWidget import ItemWidget
     from settings import settings, DOWNLOAD_DIR
     from Notifications import Notification
 
+    logger.debug(QSysInfo.kernelType())
+    logger.debug(QSysInfo.kernelVersion())
+    
     app = QApplication(sys.argv)
     app.setQuitOnLastWindowClosed(False)
-
-    for screen in app.screens():
-        logger.debug(screen.geometry())
 
     # iw = ItemWidget(None)
     # iw.show()
@@ -29,7 +29,7 @@ def main():
 
     main_widget = MainWidget()
     settings_widget = SettingsWidget()
-    notification_widget = NotificationWidget()
+    # notification_widget = NotificationWidget()
 
     app.aboutToQuit.connect(main_widget.on_close)
 
@@ -57,7 +57,7 @@ def main():
     tray_menu.addSeparator()
     tray_menu.addAction(close_action)
 
-    system_tray = QSystemTrayIcon(main_widget, QPixmap(':/main/icon.png'))
+    system_tray = QSystemTrayIcon(QPixmap(':/main/icon.png'))
     system_tray.setContextMenu(tray_menu)
 
     def show_complete(title, thumbnail):
