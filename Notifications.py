@@ -27,7 +27,7 @@ class Notification(QObject):
         elif QSysInfo.kernelType() == 'winnt':
             if QSysInfo.kernelVersion().startswith('10'):
                 version = QSysInfo.kernelVersion().split('.')
-                if int(version[2] > 17763):
+                if int(version[2]) > 17763:
                     logger.error(f'Notification system not implemented for {QSysInfo.kernelType()}, {QSysInfo.kernelVersion()}')
                 else:
                     self.system_tray.showMessage(title, text)
