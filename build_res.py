@@ -9,9 +9,11 @@ run('pyside2-uic res/SettingsWidget.ui -o Ui_SettingsWidget.py'.split())
 run('pyside2-uic res/ItemWidget.ui -o Ui_ItemWidget.py'.split())
 run('pyside2-uic res/NotificationWidget.ui -o Ui_NotificationWidget.py'.split())
 
+
 def append_import_resources(filename):
     with open(filename, 'a') as f:
         f.write('from resources_rc import *\n')
+
 
 append_import_resources('Ui_MainWidget.py')
 append_import_resources('Ui_SettingsWidget.py')

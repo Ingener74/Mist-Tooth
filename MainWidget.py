@@ -1,14 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from PySide2.QtCore import Qt, QTimerEvent, Slot, Signal, QDir, QSysInfo
-from PySide2.QtWidgets import QWidget, QListWidgetItem, QApplication, QMessageBox
-from PySide2.QtGui import QKeyEvent, QDesktopServices, QPixmap, QDropEvent, QDragEnterEvent
+from PySide2.QtCore import Qt, QTimerEvent, Signal
+from PySide2.QtGui import QKeyEvent, QPixmap, QDropEvent, QDragEnterEvent
+from PySide2.QtWidgets import QWidget, QListWidgetItem, QApplication
 
-from Ui_MainWidget import Ui_MainWidget
 from ItemWidget import ItemWidget
-from settings import settings, DOWNLOAD_DIR
-from logger import logger
+from Ui_MainWidget import Ui_MainWidget
+from settings import settings
 
 
 class MainWidget(QWidget):

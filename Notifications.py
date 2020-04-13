@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
-from PySide2.QtCore import (
-    QObject, 
-    QSysInfo)
-from PySide2.QtWidgets import QSystemTrayIcon
-from logger import logger
+import os
 import subprocess as sp
-from io import StringIO
+
+from PySide2.QtCore import (QObject, QSysInfo)
+
+from logger import logger
+
+
+def icon_in_res(filename):
+    return os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(__file__), 'res', filename)))
+
 
 class Notification(QObject):
     def __init__(self, parent=None):
@@ -27,11 +30,18 @@ class Notification(QObject):
         elif QSysInfo.kernelType() == 'winnt':
             if QSysInfo.kernelVersion().startswith('10'):
                 version = QSysInfo.kernelVersion().split('.')
-                if int(version[2]) > 17763:
-                    logger.error(f'Notification system not implemented for {QSysInfo.kernelType()}, {QSysInfo.kernelVersion()}')
+                version_patch = int(version[2])
+                if version_patch > 17763:
+                    logger.error(
+                        f'Notification system not implemented for {QSysInfo.kernelType()}, {QSysInfo.kernelVersion()}')
+                # elif version_patch < 18363:
+                #     from win10toast import ToastNotifier
+                #     toaster = ToastNotifier()
+                #     toaster.show_toast(title, text, icon_in_res('icon.ico'))
                 else:
                     self.system_tray.showMessage(title, text)
             else:
-                logger.error(f'Notification system not implemented for {QSysInfo.kernelType()}, {QSysInfo.kernelVersion()}')
+                logger.error(
+                    f'Notification system not implemented for {QSysInfo.kernelType()}, {QSysInfo.kernelVersion()}')
         else:
             logger.error(f'Notification system not implemented for {QSysInfo.kernelType()}, {QSysInfo.kernelVersion()}')

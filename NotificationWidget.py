@@ -1,13 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from PySide2.QtWidgets import QWidget, QApplication
-from PySide2.QtGui import QShowEvent, QPixmap, QPainterPath, QRegion, QScreen
 from PySide2.QtCore import QTimerEvent, Qt, QRect, QPoint, QRectF
+from PySide2.QtGui import QShowEvent, QPixmap, QPainterPath, QRegion
+from PySide2.QtWidgets import QWidget, QApplication
 
 from Ui_NotificationWidget import Ui_NotificationWidget
 
-from loguru import logger
 
 class NotificationWidget(QWidget):
     def __init__(self, parent=None):

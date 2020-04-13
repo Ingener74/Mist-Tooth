@@ -3,26 +3,27 @@
 
 from loguru import logger
 
+
 @logger.catch
 def main():
     import sys
     from PySide2.QtCore import QDir, QUrl, QSysInfo
     from PySide2.QtWidgets import QApplication, QAction, QSystemTrayIcon, QMenu
-    from PySide2.QtGui import QPixmap, QDesktopServices, QIcon, QScreen
-    
+    from PySide2.QtGui import QPixmap, QDesktopServices
+
     from MainWidget import MainWidget
     from SettingsWidget import SettingsWidget
     # from NotificationWidget import NotificationWidget
-    from ItemWidget import ItemWidget
     from settings import settings, DOWNLOAD_DIR
     from Notifications import Notification
 
     logger.debug(QSysInfo.kernelType())
     logger.debug(QSysInfo.kernelVersion())
-    
+
     app = QApplication(sys.argv)
     app.setQuitOnLastWindowClosed(False)
 
+    # from ItemWidget import ItemWidget
     # iw = ItemWidget(None)
     # iw.show()
     # iw.set_thumbnail('path to image')
@@ -34,20 +35,24 @@ def main():
     app.aboutToQuit.connect(main_widget.on_close)
 
     show_window_action = QAction(QPixmap(':/main/icon.png'), 'Показать Youtube Downloader')
+
     def show_main_window():
         main_widget.show()
         main_widget.raise_()
         main_widget.activateWindow()
+
     show_window_action.triggered.connect(show_main_window)
 
     open_download_dir_action = QAction(QPixmap(':/main/open_dir.png'), 'Открыть каталог загрузки')
+
     def open_download_dir():
         s = settings()
-        dir = s.value(DOWNLOAD_DIR) if s.contains(DOWNLOAD_DIR) else QDir.currentPath()
-        dir = f'file:///{dir}'
-        QDesktopServices.openUrl(QUrl(dir))
+        download_dir = s.value(DOWNLOAD_DIR) if s.contains(DOWNLOAD_DIR) else QDir.currentPath()
+        download_dir = f'file:///{download_dir}'
+        QDesktopServices.openUrl(QUrl(download_dir))
+
     open_download_dir_action.triggered.connect(open_download_dir)
-    
+
     close_action = QAction(QPixmap(':/main/close.png'), 'Выключить')
     close_action.triggered.connect(app.quit)
 
@@ -80,6 +85,7 @@ def main():
     # notification.show_notification('Youtube', 'Foo')
 
     sys.exit(app.exec_())
+
 
 if __name__ == "__main__":
     main()

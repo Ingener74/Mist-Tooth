@@ -2,3 +2,4 @@ PySide2
 youtube-dl
 loguru
 pyinstaller
+win10toast

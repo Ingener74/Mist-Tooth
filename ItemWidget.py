@@ -1,24 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import traceback
-import re
 import os
-from datetime import datetime
-from time import strftime
+import traceback
 
 # import requests
 import youtube_dl
-from PySide2.QtCore import Qt, QThread, Signal, Slot, QDir, QMutex
-from PySide2.QtWidgets import QListWidgetItem, QMessageBox, QWidget
+from PySide2.QtCore import Qt, QThread, Signal, QDir, QMutex
 from PySide2.QtGui import QPixmap
+from PySide2.QtWidgets import QListWidgetItem, QMessageBox, QWidget
 from loguru import logger
 
-from settings import settings, DOWNLOAD_DIR
 from Ui_ItemWidget import Ui_ItemWidget
+from settings import settings, DOWNLOAD_DIR
+
 
 class StopError(RuntimeError):
     pass
+
 
 class YouTubeDownloader(QThread):
     progress_signal = Signal(int)
@@ -50,7 +49,7 @@ class YouTubeDownloader(QThread):
             class Logger(object):
                 def __init__(self, outer):
                     self.__outer = outer
-                
+
                 def info(self, msg):
                     pass
 
@@ -79,7 +78,7 @@ class YouTubeDownloader(QThread):
             logger.debug('Stopped')
             self.complete_signal.emit()
 
-        except youtube_dl.utils.DownloadError as e:
+        except youtube_dl.utils.DownloadError:
             logger.error('Download error')
             self.complete_signal.emit()
 
@@ -107,7 +106,8 @@ class YouTubeDownloader(QThread):
                     self.progress_signal.emit(int(progress_in_percent))
                 if '_eta_str' in data and '_speed_str' in data and '_total_bytes_str' in data:
                     self.info_signal.emit(
-                        'Времени осталось: ' + data['_eta_str'] + ', Скорость: ' + data['_speed_str'] + ', Полный размер: ' + data['_total_bytes_str']
+                        'Времени осталось: ' + data['_eta_str'] + ', Скорость: ' + data[
+                            '_speed_str'] + ', Полный размер: ' + data['_total_bytes_str']
                     )
             if data['status'] == 'finished':
                 self.complete_signal.emit()
@@ -121,20 +121,20 @@ class YouTubeDownloader(QThread):
 
     @property
     def is_stop(self):
-        stop_ = False
         try:
             self.stop_mutex.lock()
             stop_ = self.stop
         finally:
             self.stop_mutex.unlock()
         return stop_
-        
+
     def stop_download(self):
         try:
             self.stop_mutex.lock()
             self.stop = True
         finally:
             self.stop_mutex.unlock()
+
 
 class ItemWidget(QWidget):
     on_complete_signal = Signal(QListWidgetItem, QPixmap)
@@ -164,7 +164,8 @@ class ItemWidget(QWidget):
         self.ui.labelInfo.setText('')
 
     def start_download(self, link: str):
-        self.youtube.start_download(link, QDir(self.settings.value(DOWNLOAD_DIR) if self.settings.contains(DOWNLOAD_DIR) else QDir.currentPath()).absolutePath())
+        self.youtube.start_download(link, QDir(self.settings.value(DOWNLOAD_DIR) if self.settings.contains(
+            DOWNLOAD_DIR) else QDir.currentPath()).absolutePath())
         self.youtube.start()
 
     def set_title(self, name: str):
